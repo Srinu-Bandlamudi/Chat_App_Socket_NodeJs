@@ -13,13 +13,15 @@ app.use('/',express.static(__dirname+'/public'));
 io.on('connection', (socket) => {
     console.log('a user connected',socket.id);
 
-    socket.on('from_client',()=>{
-        console.log('evernt coming from client');
-    });
-    setInterval(()=>{
-        socket.emit('from_server');
-    },2000);
+    socket.on('msg_send',(data)=>{
+        console.log(data);
+        io.emit('msg_rcvd',data);
+        //socket.emit('msg_rcvd',data);
+        //socket.broadcast.emit('msg_rcvd',data);
 
+    });
+
+   
   });
 
 
