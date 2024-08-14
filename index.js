@@ -14,7 +14,7 @@ io.on('connection', (socket) => {
 
     socket.on('join_room',(data)=>{
         socket.join(data.roomid,function(){
-            console.log("Joined a Room")
+            console.log("Joined a Room") 
         });
     });
 
@@ -30,10 +30,16 @@ io.on('connection', (socket) => {
         //socket.broadcast.emit('msg_rcvd',data);
     });
 
+    socket.on('typing', (data) => {
+        socket.broadcast.to(data.roomid).emit('someone_typing');
+    })
+
 });
+
 
 app.set('view engine','ejs');
 app.use('/',express.static(__dirname+'/public'));
+
 app.get('/chat/:roomid',async (req,res)=>{
     const chats=await chat.find({
         roomId:req.params.roomid
